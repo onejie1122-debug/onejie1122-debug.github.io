@@ -1357,10 +1357,24 @@ class="w-full h-full rounded-full object-cover object-top border-4 border-white 
         const result = await response.json();
 
         if (result.result === 'success') {
-    alert('Konfirmasi berhasil dikirim!');
-    rsvpForm.reset();
+
+    wishesData.unshift({
+        name: name,
+        text: text
+    });
+
+    localStorage.setItem(
+        'wishesData',
+        JSON.stringify(wishesData)
+    );
+
+    renderWishes();
+
+    alert('Ucapan berhasil dikirim!');
+    wishForm.reset();
+
 } else {
-    alert('Gagal mengirim RSVP');
+    alert('Gagal mengirim ucapan');
 }
 
     } catch (error) {
