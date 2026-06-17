@@ -1392,33 +1392,57 @@ class="w-full h-full rounded-full object-cover object-top border-4 border-white 
         const wishForm = document.getElementById('wishForm');
         const wishesList = document.getElementById('wishesList');
 
-        function renderWishes() {
-            if (wishesData.length === 0) return;
-            const existingWishes = wishesList.querySelectorAll('.message-card:not(:first-child)');
-            existingWishes.forEach(el => el.remove());
+        async function renderWishes() {
 
-            wishesData.forEach(wish => {
-                const initial = wish.name.charAt(0).toUpperCase();
-                const card = document.createElement('div');
-                card.className = 'message-card bg-white/60 backdrop-blur-sm rounded-xl p-5 border border-ivory-200/30 reveal active';
-                card.innerHTML = `
-                    <div class="flex items-start gap-3">
-                        <div class="w-10 h-10 rounded-full bg-gold-100 flex items-center justify-center flex-shrink-0">
-                            <span class="text-gold-600 text-sm font-medium">${initial}</span>
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex items-center gap-2 mb-1">
-                                <h4 class="font-medium text-ivory-800 text-sm">${wish.name}</h4>
-                                <span class="text-ivory-400 text-xs">Baru saja</span>
-                            </div>
-                            <p class="text-ivory-600 text-sm leading-relaxed">${wish.text}</p>
-                        </div>
+    wishesList.innerHTML = '';
+
+    try {
+
+        const response = await fetch(
+    'https://script.google.com/macros/s/AKfycbz4uHEvNFgmTa0auSttUG0Cx_8Wd-EU_10MgZlCvyAsAdwB_MMqiziiuLIyOWxRh7-j/exec'
+);
+
+        const wishes = await response.json();
+
+        wishes.reverse().forEach(wish => {
+
+            const initial = wish.name.charAt(0).toUpperCase();
+
+            const card = document.createElement('div');
+
+            card.className =
+                'message-card bg-white/60 backdrop-blur-sm rounded-xl p-5 border border-ivory-200/30 reveal active';
+
+            card.innerHTML = `
+                <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-full bg-gold-100 flex items-center justify-center flex-shrink-0">
+                        <span class="text-gold-600 text-sm font-medium">${initial}</span>
                     </div>
-                `;
-                wishesList.insertBefore(card, wishesList.children[1]);
-            });
-        }
 
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <h4 class="font-medium text-ivory-800 text-sm">${wish.name}</h4>
+                            <span class="text-ivory-400 text-xs">Baru saja</span>
+                        </div>
+
+                        <p class="text-ivory-600 text-sm leading-relaxed">
+                            ${wish.message}
+                        </p>
+                    </div>
+                </div>
+            `;
+
+            wishesList.appendChild(card);
+
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+}
         wishForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
