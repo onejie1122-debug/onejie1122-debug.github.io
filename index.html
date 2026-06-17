@@ -601,13 +601,11 @@ class="w-full h-full rounded-full object-cover object-top border-4 border-white 
     controls
     playsinline
     preload="metadata"
-    poster="thumbnail-video.jpg"
+    poster="https://drive.google.com/thumbnail?id=1zeuZL-TGrrTcgkqBGXVD0Ab0gWA1QTPk&sz=w1200"
     class="w-full h-auto rounded-xl">
-
-    <source src="mappettuada.mp4" type="video/mp4">
-
-    Browser Anda tidak mendukung video HTML5.
-</video>
+        <source src="mappettuada.mp4" type="video/mp4">
+        Browser Anda tidak mendukung video HTML5.
+    </video>
 </div>
             </div>
         </div>
@@ -1328,55 +1326,18 @@ class="w-full h-full rounded-full object-cover object-top border-4 border-white 
             }).join('');
         }
 
-        rsvpForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+        rsvpForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('rsvpName').value;
+            const guests = document.getElementById('rsvpGuests').value;
+            const status = document.getElementById('rsvpStatus').value;
+            const message = document.getElementById('rsvpMessage').value;
 
-    const name = document.getElementById('rsvpName').value;
-    const guests = document.getElementById('rsvpGuests').value;
-    const status = document.getElementById('rsvpStatus').value;
-    const message = document.getElementById('rsvpMessage').value;
+            rsvpData.unshift({ name, guests, status, message, date: new Date().toISOString() });
+            localStorage.setItem('rsvpData', JSON.stringify(rsvpData));
 
-    const btn = rsvpForm.querySelector('button[type="submit"]');
-    const originalText = btn.textContent;
-
-    btn.disabled = true;
-    btn.textContent = 'Mengirim...';
-
-    try {
-        const response = await fetch(
-            'https://script.google.com/macros/s/AKfycbz8-LZSKqHbqxpKN-DUYNXgbRjgrCTToT5qsvhhnblnVaagBeDpwysUhP55GGbJFOeK/exec',
-            {
-                method: 'POST',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name,
-                    guests,
-                    status,
-                    message
-                })
-            }
-        );
-
-        const result = await response.json();
-
-        if (result.success) {
-            alert('Konfirmasi berhasil dikirim!');
             rsvpForm.reset();
-        } else {
-            alert('Gagal mengirim RSVP');
-        }
-
-    } catch (error) {
-        console.error(error);
-        alert('Terjadi kesalahan saat mengirim data');
-    }
-
-    btn.disabled = false;
-    btn.textContent = originalText;
-});
+            renderRSVP();
 
             // Show success feedback
             const btn = rsvpForm.querySelector('button[type="submit"]');
