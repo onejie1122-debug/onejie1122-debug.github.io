@@ -1465,8 +1465,39 @@ class="w-full h-full rounded-full object-cover object-top border-4 border-white 
         const result = await response.json();
 
         if (result.result === 'success') {
-            alert('Ucapan berhasil dikirim!');
-            wishForm.reset();
+
+    const wishesList = document.getElementById('wishesList');
+
+    const card = document.createElement('div');
+
+    card.className =
+        'message-card bg-white/60 backdrop-blur-sm rounded-xl p-5 border border-ivory-200/30';
+
+    card.innerHTML = `
+        <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-full bg-gold-100 flex items-center justify-center">
+                <span class="text-gold-600 text-sm font-medium">
+                    ${name.charAt(0).toUpperCase()}
+                </span>
+            </div>
+
+            <div class="flex-1">
+                <div class="flex items-center gap-2 mb-1">
+                    <h4 class="font-medium text-ivory-800 text-sm">${name}</h4>
+                    <span class="text-ivory-400 text-xs">Baru saja</span>
+                </div>
+
+                <p class="text-ivory-600 text-sm">
+                    ${text}
+                </p>
+            </div>
+        </div>
+    `;
+
+    wishesList.prepend(card);
+
+    wishForm.reset();
+}
         } else {
             alert('Gagal mengirim ucapan');
         }
